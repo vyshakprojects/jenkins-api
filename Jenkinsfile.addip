@@ -3,6 +3,7 @@ pipeline {
   stages {
     stage ('Add IP') {
       steps {
+              sh "chmod +x $WORKSPACE/add.sh"
               sh "$WORKSPACE/add.sh"
             }
         }
