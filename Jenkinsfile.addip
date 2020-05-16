@@ -1,11 +1,26 @@
+
 pipeline {
-  agent any
-  stages {
-    stage ('Add IP') {
-      steps {
-              sh "chmod +x $WORKSPACE/add.sh"
-              sh "$WORKSPACE/add.sh $IP $PRODUCT"
+    agent any
+
+    properties([
+      parameters([
+        string(defaultValue: '', description: '', name: 'IP', trim: false),
+        string(defaultValue: '', description: '', name: 'PRODUCT', trim: false)
+      ])
+    ])
+    stages {
+        stage('Trigger') {
+            steps {
+                script {
+                    println("triggering the pipeline from a rest call...")
+                }
             }
         }
+        stage("foo") {
+            steps {
+              sh "chmod +x $WORKSPACE/add.sh"
+              sh "$WORKSPACE/add.sh $IP $PRODUCT"            }
+        }
+
     }
 }
