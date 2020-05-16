@@ -1,0 +1,2 @@
+export JENKINS_USER_NAME=admin
+export JENKINS_TOKEN=114dbaf3da98dc649de5315ac30937985e
