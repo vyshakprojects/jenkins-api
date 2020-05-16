@@ -2,9 +2,7 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'IP', defaultValue: '', description: ''),
-    }
-    parameters {
+        string(name: 'IP', defaultValue: '', description: '')
         string(name: 'PRODUCT', defaultValue: '', description: '')
     }
     stages {
