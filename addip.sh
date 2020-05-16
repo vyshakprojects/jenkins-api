@@ -2,7 +2,7 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 JENKINS_URL="http://192.168.10.20:8080"
-JOB_PATH=test
+JOB_PATH=test2/job/master
 
 PRODUCT=$1
 if [ -z "${PRODUCT}" ]; then
@@ -25,11 +25,11 @@ fi
 echo "Getting your public IP..."
 my_ip=$(curl -s https://api.ipify.org);
 parameters="&IP=${my_ip}&PRODUCT=${PRODUCT}"
-
-STATUS=`curl -X POST "${JENKINS_URL}/job/${JOB_PATH}/buildWithParameters?delay=0sec${parameters}" --user ${JENKINS_USER_NAME}:${JENKINS_TOKEN} -s -o /dev/null -w "%{http_code}"`
-if [ $STATUS -eq 201 ]; then
-   echo ">>>Request Successful"
-else
-   echo ">>>Request Failed"
-   exit 1
-fi
+curl -X POST "${JENKINS_URL}/job/${JOB_PATH}/buildWithParameters?delay=0sec${parameters}" --user ${JENKINS_USER_NAME}:${JENKINS_TOKEN} 
+# STATUS=`curl -X POST "${JENKINS_URL}/job/${JOB_PATH}/buildWithParameters?delay=0sec${parameters}" --user ${JENKINS_USER_NAME}:${JENKINS_TOKEN} -s -o /dev/null -w "%{http_code}"`
+# if [ $STATUS -eq 201 ]; then
+#    echo ">>>Request Successful"
+# else
+#    echo ">>>Request Failed"
+#    exit 1
+# fi

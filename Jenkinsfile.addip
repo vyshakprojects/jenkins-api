@@ -1,13 +1,10 @@
 
 pipeline {
     agent any
-
-    properties([
-      parameters([
+      parameters{
         string(defaultValue: '', description: '', name: 'IP', trim: false),
         string(defaultValue: '', description: '', name: 'PRODUCT', trim: false)
-      ])
-    ])
+      }
     stages {
         stage('Trigger') {
             steps {
