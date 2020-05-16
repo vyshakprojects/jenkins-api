@@ -1,1 +1,3 @@
+IP=$1
+PRODUCT=$2
 echo "$IP $PRODUCT"
