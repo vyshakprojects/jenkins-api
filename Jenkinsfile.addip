@@ -2,7 +2,8 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'IP', defaultValue: '', description: '')
+        string(name: 'IP', defaultValue: '', description: ''),
+        string(name: 'PRODUCT', defaultValue: '', description: '')
     }
     stages {
         stage('Trigger') {
@@ -15,7 +16,7 @@ pipeline {
         stage("foo") {
             steps {
               sh "chmod +x $WORKSPACE/add.sh"
-              sh "$WORKSPACE/add.sh ${params.IP}"            }
+              sh "$WORKSPACE/add.sh ${params.IP} ${params.PRODUCT}"            }
         }
 
     }
