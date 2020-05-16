@@ -15,7 +15,7 @@ pipeline {
         stage("foo") {
             steps {
               sh "chmod +x $WORKSPACE/add.sh"
-              sh "$WORKSPACE/add.sh ${params.IP}"            }
+              sh "sh $WORKSPACE/add.sh ${params.IP}"            }
         }
 
     }
