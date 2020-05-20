@@ -1,23 +1,19 @@
-
 pipeline {
     agent any
     parameters {
-      string(name: 'IP', defaultValue: '', description: 'Enter your IP here:')
-      choice(name: 'PRODUCT', choices: ['engati', 'leadmi', 'automi'], description: 'Select Product')
+        string(name: 'IP', defaultValue: '', description: 'Enter your IP here:')
+        choice(name: 'PRODUCT', choices: ['engati', 'leadmi', 'automi'], description: 'Select Product')
     }
     stages {
-        stage('Trigger') {
+        stage('Adding IPs') {
             steps {
-                script {
-                    println("triggering the pipeline from a rest call...")
-                }
+            withCredentials([
+                string(
+                    credentialsId: 'digitalocean-access-token',
+                    variable: 'DIGITALOCEAN_TOKEN')
+            ]) {
+                sh "python3 $WORKSPACE/do-test.py add ${DIGITALOCEAN_TOKEN} ${params.IP}"
             }
         }
-        stage("foo") {
-            steps {
-              sh "chmod +x $WORKSPACE/add.sh"
-              sh "$WORKSPACE/add.sh ${params.IP} ${params.PRODUCT}"            }
-        }
-
     }
 }
