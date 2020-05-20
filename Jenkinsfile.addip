@@ -2,7 +2,6 @@ pipeline {
     agent any
     parameters {
         string(name: 'IP', defaultValue: '', description: 'Enter your IP here:')
-        choice(name: 'PRODUCT', choices: ['engati', 'leadmi', 'automi'], description: 'Select Product')
     }
     stages {
         stage('Adding IPs') {
