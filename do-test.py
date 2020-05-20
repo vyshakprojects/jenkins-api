@@ -5,6 +5,7 @@ import json
 import requests
 from requests.exceptions import HTTPError
 
+actions = ["add", "remove"]
 data_template = '''
 {
   "name": "secure-ssh",
@@ -15,7 +16,18 @@ data_template = '''
 }
 '''
 
-actions = ["add", "remove"]
+try:
+    action = sys.argv[1]
+    if action not in actions:
+        print(usage("invalid action argument"))
+        sys.exit(1)
+
+    token = sys.argv[2]
+except IndexError:
+    print(usage("argument action or token is missing"))
+    sys.exit(1)
+
+
 endpoint = "https://api.digitalocean.com/v2/firewalls/"
 headers = {"Authorization": f"Bearer {token}"}
 response = requests.get(endpoint, headers=headers).json()
@@ -49,17 +61,6 @@ def update_firewall(firewall_endpoint, data):
         print(f'Other error occurred: {err}')
     else:
         print('Success!')
-
-try:
-    action = sys.argv[1]
-    if action not in actions:
-        print(usage("invalid action argument"))
-        sys.exit(1)
-
-    token = sys.argv[2]
-except IndexError:
-    print(usage("argument action or token is missing"))
-    sys.exit(1)
 
 for firewall in firewalls:
     if "secure-access" in firewall["name"]:
