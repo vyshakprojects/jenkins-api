@@ -5,6 +5,24 @@ import json
 import requests
 from requests.exceptions import HTTPError
 
+data_template = '''
+{
+  "name": "secure-ssh",
+  "inbound_rules": [],
+  "outbound_rules": [],
+  "droplet_ids": [],
+  "tags": []
+}
+'''
+
+actions = ["add", "remove"]
+endpoint = "https://api.digitalocean.com/v2/firewalls/"
+headers = {"Authorization": f"Bearer {token}"}
+response = requests.get(endpoint, headers=headers).json()
+firewalls = response["firewalls"]
+firewall_ids = []
+
+
 def usage(message):
     usage = f"""
     ERROR: {message}:
@@ -12,7 +30,7 @@ def usage(message):
         1. action
         2. token
         3. ip
-    eg: {sys.argv[0]} add <token> 1.2.3.4
+    eg: {sys.argv[0]} add/remove <token> 1.2.3.4
     """
     return usage
 
@@ -32,37 +50,16 @@ def update_firewall(firewall_endpoint, data):
     else:
         print('Success!')
 
-data_template = '''
-{
-  "name": "secure-ssh",
-  "inbound_rules": [],
-  "outbound_rules": [],
-  "droplet_ids": [],
-  "tags": []
-}
-'''
-rule_template = '''
-{
-  "protocol": "tcp",
-  "ports": "22",
-  "sources": {
-    "addresses": []
-  }
-}
-'''
-
 try:
     action = sys.argv[1]
+    if action not in actions:
+        print(usage("invalid action argument"))
+        sys.exit(1)
+
     token = sys.argv[2]
 except IndexError:
     print(usage("argument action or token is missing"))
     sys.exit(1)
-
-endpoint = "https://api.digitalocean.com/v2/firewalls/"
-headers = {"Authorization": f"Bearer {token}"}
-response = requests.get(endpoint, headers=headers).json()
-firewalls = response["firewalls"]
-firewall_ids = []
 
 for firewall in firewalls:
     if "secure-access" in firewall["name"]:
@@ -94,9 +91,7 @@ if action == "add":
                 print("adding your IP: " + my_ip +" for port: "+ firewall_port + " to " + firewall_name)
                 changed = True
                 access_ips.append(my_ip)
-            rule = json.loads(rule_template)
             rule['sources']['addresses'] = access_ips
-            rule['ports'] = firewall_port
             data['inbound_rules'].append(rule)
         data['name'] = firewall_name
         data['droplet_ids'] = droplet_id
@@ -113,9 +108,7 @@ else:
         coviam_ips = ["182.73.36.82", "182.74.255.66", "182.73.36.84", "182.74.20.126"]
         for rule in inbound_rules:
             firewall_port = rule["ports"]
-            rule = json.loads(rule_template)
             rule['sources']['addresses'] = coviam_ips
-            rule['ports'] = firewall_port
             data['inbound_rules'].append(rule)
         data['name'] = firewall_name
         data['droplet_ids'] = droplet_id
