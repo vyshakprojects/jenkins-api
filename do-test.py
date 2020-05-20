@@ -29,7 +29,7 @@ except IndexError:
 
 
 endpoint = "https://api.digitalocean.com/v2/firewalls/"
-headers = {"Authorization": f"Bearer {token}"}
+headers = {"Authorization": "Bearer %s".format(TOKEN)}
 response = requests.get(endpoint, headers=headers).json()
 firewalls = response["firewalls"]
 firewall_ids = []
