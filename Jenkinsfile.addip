@@ -13,7 +13,8 @@ pipeline {
                     variable: 'DIGITALOCEAN_TOKEN')
             ]) {
                 sh "python3 $WORKSPACE/do-test.py add ${DIGITALOCEAN_TOKEN} ${params.IP}"
-            }
-        }
-    }
+              }
+          }
+      }
+  }
 }
