@@ -7,7 +7,11 @@ pipeline {
     stages {
         stage('Adding IPs') {
             steps {
-            {
+            withCredentials([
+                string(
+                    credentialsId: 'digitalocean-access-token',
+                    variable: 'DIGITALOCEAN_TOKEN')
+            ]) {
                 sh "echo deploying ${params.app_name} ${params.version}"
               }
           }
