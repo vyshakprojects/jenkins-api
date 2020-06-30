@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        choice(name: 'app_name', defaultValue: '', choices: ['engati-portal', 'engati-bot', 'engati-answers'], description: 'Select applicaiton to deploy')
+        choice(name: 'app_name', choices: ['','engati-portal', 'engati-bot', 'engati-answers'], description: 'Select applicaiton to deploy')
         string(name: 'version', defaultValue: '', description: 'enter your feature-branch Version')
     }
     stages {
